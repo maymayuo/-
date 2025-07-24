@@ -1,0 +1,55 @@
+{
+  "basic_stats": {
+    "total_characters": 840,
+    "unique_characters": 34,
+    "coverage_ratio": 0.04047619047619048
+  },
+  "frequency_stats": {
+    "max_frequency": 60,
+    "min_frequency": 20,
+    "avg_frequency": 24.705882352941178
+  },
+  "top_characters": [
+    [
+      "国",
+      60
+    ],
+    [
+      "年",
+      60
+    ],
+    [
+      "三",
+      40
+    ],
+    [
+      "演",
+      40
+    ],
+    [
+      "义",
+      40
+    ],
+    [
+      "之",
+      40
+    ],
+    [
+      "是",
+      20
+    ],
+    [
+      "中",
+      20
+    ],
+    [
+      "古",
+      20
+    ],
+    [
+      "典",
+      20
+    ]
+  ],
+  "analysis_time": "2025-07-23 15:09:53"
+}

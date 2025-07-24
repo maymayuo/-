@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三国演义字频统计</title>
+    <style>
+        body { font-family: 'PingFang SC', Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; margin-bottom: 30px; }
+        .upload-area { border: 2px dashed #ddd; padding: 40px; text-align: center; margin: 20px 0; border-radius: 8px; }
+        .upload-area:hover { border-color: #007AFF; background: #f0f8ff; }
+        input[type="file"] { margin: 20px 0; }
+        button { background: #007AFF; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 16px; margin: 5px; }
+        button:hover { background: #0056CC; }
+        .results { margin-top: 30px; }
+        .char-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
+        .loading { display: none; text-align: center; padding: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 三国演义字频统计系统</h1>
+        
+        <div class="upload-area">
+            <h3>📁 上传文本文件或运行演示</h3>
+            <input type="file" id="fileInput" accept=".txt">
+            <br>
+            <button onclick="analyzeFile()">🔍 分析文件</button>
+            <button onclick="runDemo()">🎯 运行演示</button>
+        </div>
+        
+        <div id="loading" class="loading">
+            <p>正在分析中，请稍候...</p>
+        </div>
+        
+        <div id="results" class="results" style="display:none;">
+            <h3>📊 分析结果</h3>
+            <div id="statsInfo"></div>
+            <h4>🏆 高频汉字排行榜</h4>
+            <div id="charList"></div>
+        </div>
+    </div>
+
+    <script>
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+        
+        function showResults(data) {
+            hideLoading();
+            const results = document.getElementById('results');
+            const statsInfo = document.getElementById('statsInfo');
+            const charList = document.getElementById('charList');
+            
+            statsInfo.innerHTML = `
+                <p><strong>总字符数:</strong> ${data.basic_stats.total_characters.toLocaleString()}</p>
+                <p><strong>唯一字符数:</strong> ${data.basic_stats.unique_characters.toLocaleString()}</p>
+                <p><strong>最高频字符:</strong> "${data.top_characters[0][0]}" (${data.top_characters[0][1]} 次)</p>
+            `;
+            
+            charList.innerHTML = data.top_characters.slice(0, 20).map((item, index) => 
+                `<div class="char-item">
+                    <span>${index + 1}. "${item[0]}"</span>
+                    <span>${item[1]} 次</span>
+                </div>`
+            ).join('');
+            
+            results.style.display = 'block';
+        }
+        
+        function analyzeFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('请先选择一个文件！');
+                return;
+            }
+            
+            showLoading();
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            fetch('/api/analyze', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showResults(data.results);
+                } else {
+                    hideLoading();
+                    alert('分析失败: ' + data.error);
+                }
+            })
+            .catch(error => {
+                hideLoading();
+                alert('请求失败: ' + error);
+            });
+        }
+        
+        function runDemo() {
+            showLoading();
+            
+            fetch('/api/demo')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showResults(data.results);
+                } else {
+                    hideLoading();
+                    alert('演示失败: ' + data.error);
+                }
+            })
+            .catch(error => {
+                hideLoading();
+                alert('请求失败: ' + error);
+            });
+        }
+    </script>
+</body>
+</html>
+
