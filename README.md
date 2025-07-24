@@ -8,7 +8,7 @@
 - [txt数据](https://txt520.com/mingzhu/43857.html)
 
 ## KING DEMO
-- [工具型应用demo]（http://localhost:5000）
+- [工具型应用demo](http://localhost:5000)
   
 ### 边界条件考虑
 1. 文本分析时间：上传文件大小限制在16MB，
