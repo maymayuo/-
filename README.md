@@ -2,7 +2,7 @@
 原始提问：找出三国演义中出现次数最多的字？
 
 ## 系统设计
-![处理思路](design1_1.png)
+![处理思路](https://github.com/maymayuo/Three-Kindoms/blob/main/designNew.png)
 
 ## 数据
 - [txt数据](https://txt520.com/mingzhu/43857.html)
